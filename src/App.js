@@ -1,24 +1,18 @@
 import React from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux'
 import {auth, createUserProfileDoc} from './firebase/firebase.utils'
-import HomePage from './pages/home/homepage.component';
-import ShopPage from './pages/shop/shop.component';
-import SignUser from './pages/sign-user/sign-user.component';
-import Header from './components/header/header.component';
 import {setCurrentUser} from "./redux/user/user.actions";
 
 import './App.css';
 
+import HomePage from './pages/home/homepage.component';
+import ShopPage from './pages/shop/shop.component';
+import SignUser from './pages/sign-user/sign-user.component';
+import Header from './components/header/header.component';
+
 //NOTE: We convert the functional App to class so that we can access the state
 class App extends React.Component {
-
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         currentUser: null
-    //     }
-    // }
 
     unsubscribeFromAuth = null;
 
@@ -35,14 +29,6 @@ class App extends React.Component {
                         id: snapShot.id,
                         ...snapShot.data()
                     })
-                    // this.setState({
-                    //     currentUser: {
-                    //         id: snapShot.id,
-                    //         ...snapShot.data()
-                    //     }
-                    // }, () => { //NOTE: This second arg in set state is a async callback
-                    //     console.log('[ app : componentDidMount() ] - state: ', this.state)
-                    // })
                 });
             } else {
                 //NOTE: In case theres no user auth found then we just set whatever value of userAuth
@@ -64,7 +50,11 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path='/' component={HomePage}/>
                     <Route path='/shop' component={ShopPage}/>
-                    <Route path='/signIn' component={SignUser}/>
+                    <Route exact path='/signIn' 
+                           render={ 
+                               ()=> this.props.currentUser ? (<Redirect to='/' />) : (<SignUser />) 
+                           } 
+                    />
                 </Switch>
             </div>
         );
@@ -72,8 +62,13 @@ class App extends React.Component {
 
 }
 
-const mapStateToProps = dispatch => ({
+const mapStateToProps = ({user}) => ({
+    currentUser: user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
     setCurrentUser: user => dispatch(setCurrentUser(user)) //NOTE: user is the payload
 })
-//NOTE: For connect first state arg is set to null because we are not passing any state in app component
-export default connect(null, mapStateToProps)(App);
+
+//NOTE: We get the current user from the redux state which is the mapStateToProps and pass as a state first arg in connect
+export default connect(mapStateToProps, mapDispatchToProps)(App);
