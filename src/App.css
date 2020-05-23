@@ -7,3 +7,8 @@ a {
     text-decoration: none;
     color: black;
 }
+
+/*//NOTE: The '*' is the universal selector, this will remove extra padding of the input border fields*/
+* {
+    box-sizing: border-box;
+}
