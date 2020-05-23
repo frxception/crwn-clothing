@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
-import { auth } from './firebase/firebase.utils'
+import {auth, createUserProfileDoc} from './firebase/firebase.utils'
 import './App.css';
 import HomePage from './pages/home/homepage.component';
 import ShopPage from './pages/shop/shop.component';
@@ -9,30 +9,43 @@ import Header from './components/header/header.component';
 
 //NOTE: We convert the functional App to class so that we can access the state
 class App extends React.Component {
-    
+
     constructor(props) {
-        super (props);
+        super(props);
         this.state = {
             currentUser: null
         }
     }
-    
+
     unsubscribeFromAuth = null;
-    
-    
+
     componentDidMount() {
         //NOTE: Auth onAuthStateChanged is an open subscription. Thus, we need to also unsubscribe to avoid memory leak
-        this.unsubscribeFromAuth = auth.onAuthStateChanged(user => { 
-            this.setState({ currentUser: user })
-            console.log('[ app:componentDidMount ] - currentUser: ', user)
+        this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => { //NOTE: user argument is async because we will getting the data from firebase
+            if (userAuth) {
+                const userRef = await createUserProfileDoc(userAuth);
+                userRef.onSnapshot(snapShot => {
+                    this.setState({
+                        currentUser: {
+                            id: snapShot.id,
+                            ...snapShot.data()
+                        }
+                    }, () => { //NOTE: This second arg in set state is a async callback
+                        console.log('[ app : componentDidMount() ] - state: ', this.state)
+                    })
+                });
+            } else {
+                this.setState({currentUser: userAuth});
+                console.log('[ app : componentDidMount() ] - userAuth is null set state: ', this.state)
+            }
         })
     }
-    
+
     componentWillUnmount() {
         //NOTE: This will unsubscribe firebase auth when component is about to be unmounted
         this.unsubscribeFromAuth()
     }
-    
+
     render() {
         return (
             <div>
@@ -45,7 +58,7 @@ class App extends React.Component {
             </div>
         );
     }
-    
+
 }
 
 export default App;
