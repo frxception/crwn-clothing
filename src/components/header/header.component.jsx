@@ -2,11 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { auth } from '../../firebase/firebase.utils'
+import CartIcon from "../cart-icon/cart-icon.component";
+import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 import { ReactComponent as Logo } from '../../assets/crown.svg'
+
 import './header.styles.scss'
 
 // NOTE: We use function because we dont care about the state
-const Header = ({currentUser}) => (
+const Header = ({currentUser, isShow}) => (
     <div className='header'>
         <Link className="logo-container" to="/">
             <Logo className='logo'/>
@@ -27,14 +30,19 @@ const Header = ({currentUser}) => (
                     SIGN IN
                 </Link>
             )}
+            <CartIcon/>
         </div>
+        {
+            isShow? null : <CartDropdown/>
+        }
     </div>
 )
 
-
-const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
+const mapStateToProps = ({user: {currentUser}, cart: {isShow}}) => ({ //NOTE: Desctructure ALL redux state store
+    currentUser,
+    isShow
 })
+
 
 //NOTE: redux connect is a higher component
 export default connect(mapStateToProps)(Header);
