@@ -39,10 +39,10 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.6.0"
+    "eslint": "^6.6.0",
+    "redux-devtools-extension": "^2.13.8"
   },
   "resolutions": {
     "eslint": "^6.6.0"
   }
-  
 }

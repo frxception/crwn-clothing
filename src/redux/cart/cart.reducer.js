@@ -18,6 +18,7 @@ const cartReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 // cartItems: [...state.cartItems, action.payload] //NOTE: Spread all previous state cart items then the next arg is the newly added coming cart item as payload
                 cartItems: addItemToCart(state.cartItems, action.payload)
+                //TODO: Ideally we should put the logic from cart utils in here right???
             }
             
         default:
