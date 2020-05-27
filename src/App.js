@@ -10,6 +10,7 @@ import HomePage from './pages/home/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignUser from './pages/sign-user/sign-user.component';
 import Header from './components/header/header.component';
+import CheckoutPage from "./pages/checkout/checkout.component";
 
 //NOTE: We convert the functional App to class so that we can access the state
 class App extends React.Component {
@@ -56,6 +57,7 @@ class App extends React.Component {
                                () => this.props.currentUser ? (<Redirect to='/'/>) : (<SignUser/>)
                            }
                     />
+                    <Route exact path='/checkout' component={CheckoutPage} />
                 </Switch>
             </div>
         );
