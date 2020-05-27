@@ -46,15 +46,15 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Header />
+                <Header/>
                 <Switch>
                     <Route exact path='/' component={HomePage}/>
                     <Route path='/shop' component={ShopPage}/>
-                    <Route exact path='/signIn' 
-                           render={  
+                    <Route exact path='/signIn'
+                           render={
                                //NOTE: This will redirect to home if goin to signin page with auth use already set
-                               ()=> this.props.currentUser ? (<Redirect to='/' />) : (<SignUser />) 
-                           } 
+                               () => this.props.currentUser ? (<Redirect to='/'/>) : (<SignUser/>)
+                           }
                     />
                 </Switch>
             </div>
