@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { createStructuredSelector } from "reselect";
 import { auth } from '../../firebase/firebase.utils'
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
+import { selectCartToggleShow } from "../../redux/cart/cart.selectors";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { ReactComponent as Logo } from '../../assets/crown.svg'
 
 import './header.styles.scss'
@@ -38,9 +41,15 @@ const Header = ({currentUser, isShow}) => (
     </div>
 )
 
-const mapStateToProps = ({user: {currentUser}, cart: {isShow}}) => ({ //NOTE: Desctructure ALL redux state store
-    currentUser,
-    isShow
+// const mapStateToProps = ({user: {currentUser}, cart: {isShow}}) => ({ //NOTE: Desctructure ALL redux state store
+//     currentUser,
+//     isShow
+// })
+
+//NOTE: Memoize selector
+const mapStateToProps = createStructuredSelector({
+    currentUser: selectCurrentUser, //NOTE: No need to call selectCurrentUser(state) because of createStructuredSelector
+    isShow: selectCartToggleShow //NOTE: No need to call selectCartToggleShow(state) because of createStructuredSelector
 })
 
 //NOTE: redux connect is a higher component
