@@ -43,6 +43,5 @@ const mapStateToProps = ({user: {currentUser}, cart: {isShow}}) => ({ //NOTE: De
     isShow
 })
 
-
 //NOTE: redux connect is a higher component
 export default connect(mapStateToProps)(Header);

@@ -51,7 +51,8 @@ class App extends React.Component {
                     <Route exact path='/' component={HomePage}/>
                     <Route path='/shop' component={ShopPage}/>
                     <Route exact path='/signIn' 
-                           render={ 
+                           render={  
+                               //NOTE: This will redirect to home if goin to signin page with auth use already set
                                ()=> this.props.currentUser ? (<Redirect to='/' />) : (<SignUser />) 
                            } 
                     />

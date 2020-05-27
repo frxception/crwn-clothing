@@ -1,6 +1,6 @@
 import React from "react";
 import {ReactComponent as ShoppingIcon} from "../../assets/shopping-bag.svg";
-import toggleShowCart from '../../redux/cart/cart.actions'
+import {toggleShowCart, addItem} from '../../redux/cart/cart.actions'
 import { connect } from 'react-redux'
 import './cart-icon.styles.scss'
 
@@ -14,6 +14,11 @@ const CartIcon = ({toggleShowCart}) => (
 
 const mapDispatchToProps = dispatch=> ({
     toggleShowCart: () => dispatch(toggleShowCart()) //eslint-disable-line
+
 })
 
+
 export default connect(null, mapDispatchToProps)(CartIcon);
+
+//NOTE: This can be done like this too
+// export default connect(null, {toggleShowCart})(CartIcon);
