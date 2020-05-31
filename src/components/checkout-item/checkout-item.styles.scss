@@ -23,7 +23,18 @@
   }
 
   .quantity {
-    padding-left: 20px;
+    display: flex;
+    .value{
+      margin: 4px 10px;
+    }
+    .adjust{
+      text-align: center;
+      margin: 7px 2px;
+      height: 21px;
+      justify-content: center;
+      display: flex;
+      width: 12px;
+    }
   }
 
   .remove-button {
