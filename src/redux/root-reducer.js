@@ -1,8 +1,9 @@
 import {combineReducers} from 'redux';
-
+import {persistReducer} from "redux-persist";
 import userReducer from './user/user.reducer';
 import cartReducer from './cart/cart.reducer';
-import {persistReducer} from "redux-persist";
+import directoryReducer from "./directory/directory.reducer";
+import shopReducer from "./shop/shop.reducer";
 import storage from "redux-persist/lib/storage"; //NOTE: This is lib will use localstorage (you can use sessionstorage also)
 
 const persistCfg = {
@@ -13,7 +14,9 @@ const persistCfg = {
 
 const rootReducer = combineReducers({
     user: userReducer,
-    cart: cartReducer
+    cart: cartReducer,
+    directory: directoryReducer,
+    shop: shopReducer
 })
 
 export default persistReducer(persistCfg, rootReducer)
