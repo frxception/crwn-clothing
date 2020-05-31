@@ -6,31 +6,32 @@ import {withRouter} from "react-router-dom";
 import CustomButton from "../custom-button/custom-button.component";
 import CartItem from "../cart-item/cart-item.component";
 import {selectCartItems} from '../../redux/cart/cart.selectors'
+import {toggleShowCart} from "../../redux/cart/cart.actions";
 
 import './cart-dropdown.styles.scss'
 
 
-const CartDropdown = ({cartItems, history}) => ( //NOTE: history is from the withRouter props
+const CartDropdown = ({cartItems, history, dispatch}) => ( //NOTE: history is from the withRouter props, dispatch is part of the component context
     <div className='cart-dropdown'>
         <div className='cart-items'>
             {
                 cartItems.length ?
-                    (cartItems.map(cartItem => {
-                                return (
-                                    <React.Fragment>
-                                        <CartItem key={cartItem.id} item={cartItem}/>
-                                        <CustomButton onClick={() => history.push('/checkout')}>PROCEED TO CHECKOUT</CustomButton>
-                                    </React.Fragment>
-
-                                )
-                            }
-                        )
+                    (
+                        cartItems.map(cartItem => (<CartItem key={cartItem.id} item={cartItem}/>))
                     ) : (
                         <span className='empty-message'>Your cart is empty</span>
                     )
             }
         </div>
-        {/*<CustomButton onClick={()=>history.push('/checkout')}>PROCEED TO CHECKOUT</CustomButton>*/}
+        {/*TODO: Add logic to hide this button if cart is empty (with styles and shit) */}
+        <CustomButton onClick={
+                        () => {
+                            history.push('/checkout')
+                            dispatch(toggleShowCart())
+                        }
+                    }
+                  disabled={cartItems.length === 0}>PROCEED TO CHECKOUT
+        </CustomButton>
     </div>
 )
 
@@ -42,6 +43,6 @@ const CartDropdown = ({cartItems, history}) => ( //NOTE: history is from the wit
 //NOTE: Using memoization with selectors to set the cart itmes state
 const mapStateToProps = createStructuredSelector({
     cartItems: selectCartItems
-})
+});
 
 export default withRouter(connect(mapStateToProps)(CartDropdown)); //NOTE: withRouter takes a component in which connect returns one also
